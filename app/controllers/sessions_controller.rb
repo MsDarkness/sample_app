@@ -12,11 +12,11 @@ class SessionsController < ApplicationController
       @title = "Sign in"
       render 'new'
     else
-	
-		if ((params[:remember_me]) == "true")
+		#handles what happens if user checks/does not check remember me box
+		if ((params[:remember_me]) == "true") #box was checked
 			flash[:success] = "Please use caution when chosing to be remembered"
 			sign_in_remembered user #for when remember me is checked
-		else
+		else #box was not checked
 			sign_in_nonremembered user # for when remember me is not checked
 		end
       redirect_to user

@@ -1,12 +1,12 @@
 module SessionsHelper
 
-  def sign_in_nonremembered(user)
-    cookies.signed[:remember_token] = [user.id, user.salt]
+  def sign_in_nonremembered(user) # to handle remember me not checked
+    cookies.signed[:remember_token] = [user.id, user.salt] #key line
     self.current_user = user
   end
   
-  def sign_in_remembered (user)
-	cookies.permanent.signed[:remember_token] = [user.id, user.salt]
+  def sign_in_remembered (user) # to handle remember me checked
+	cookies.permanent.signed[:remember_token] = [user.id, user.salt] #key line
     self.current_user = user
   end
   
