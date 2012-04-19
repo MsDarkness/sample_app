@@ -6,21 +6,49 @@ describe UsersController do
   describe "GET 'index'" do
 
     describe "for non-signed-in users" do
-      it "should deny access" do
-        get :index
-        response.should redirect_to(signin_path)
-        flash[:notice].should =~ /sign in/i
+      #it "should deny access" do
+        #get :index
+        #response.should redirect_to(signin_path)
+        #flash[:notice].should =~ /sign in/i
+      #end
+	  
+	  before(:each) do
+		@user = test_sign_in(Factory(:user))
+        second = Factory(:user, :name => "Bob", :email => "another@example.com", :publicprofile => true)
+        third = Factory(:user, :name => "Ben", :email => "another@example.net", :publicprofile => false)
+		fourth = Factory(:user, :name => "Dave", :email => "another@example.com", :publicprofile => true)
+        fifth = Factory(:user, :name => "Hal", :email => "another@example.net", :publicprofile => false)
+
+        @users = [@user, second, third, fourth, fifth]
+        30.times do
+          @users << Factory(:user, :name => Factory.next(:name), :email => Factory.next(:email))
+        end
+		
+		it "should only show public profiles" do
+			@users.each do |user|
+			
+			if(user.publicprofile)
+				get :index
+				#list public profiles
+			elsif(!user.publicprofile)
+				get :index
+				#don't list private profiles
+		end
+		
       end
+	  
     end
 
     describe "for signed-in users" do
 
       before(:each) do
         @user = test_sign_in(Factory(:user))
-        second = Factory(:user, :name => "Bob", :email => "another@example.com")
-        third = Factory(:user, :name => "Ben", :email => "another@example.net")
+        second = Factory(:user, :name => "Bob", :email => "another@example.com", :publicprofile => true)
+        third = Factory(:user, :name => "Ben", :email => "another@example.net", :publicprofile => false)
+		fourth = Factory(:user, :name => "Dave", :email => "another@example.com", :publicprofile => true)
+        fifth = Factory(:user, :name => "Hal", :email => "another@example.net", :publicprofile => false)
 
-        @users = [@user, second, third]
+        @users = [@user, second, third, fourth, fifth]
         30.times do
           @users << Factory(:user, :name => Factory.next(:name),
                                    :email => Factory.next(:email))
