@@ -216,6 +216,14 @@ describe UsersController do
       response.should have_selector("a", :href => gravatar_url,
                                          :content => "change")
     end
+	
+	
+	#check for checkbox
+	it "should have a checkbox named 'publicprofile' " do
+		get :edit, :id => @user
+		response.should have_selector("input", :type => "checkbox", :name => "publicprofile")
+	end
+	
   end
 
   describe "PUT 'update'" do
