@@ -30,11 +30,11 @@ class UsersController < ApplicationController
   end
 
   def show
-		if signed_in? 
+		if signed_in?  #lets users see profiles if signed in
 			@user = User.find(params[:id])
 			@microposts = @user.microposts.paginate(:page => params[:page])
 			@title = @user.name
-		else
+		else # don't let unsigned in users see profiles that are
 			if(User.find(params[:id]).publicprofile)
 				@user = User.find(params[:id])
 				@title = @user.name
