@@ -21,12 +21,27 @@ class UsersController < ApplicationController
   def index
     @title = "All users"
     @users = User.paginate(:page => params[:page])
+	
+		if signed_in? #show all users if user is signed in
+			@get_Users = User.all
+		else # if not signed in, just show public profiles
+			@get_Users = User.find_all_by_publicprofile(true)
+		end
   end
 
   def show
-    @user = User.find(params[:id])
-    @microposts = @user.microposts.paginate(:page => params[:page])
-    @title = @user.name
+		if signed_in? 
+			@user = User.find(params[:id])
+			@microposts = @user.microposts.paginate(:page => params[:page])
+			@title = @user.name
+		else
+			if(User.find(params[:id]).publicprofile)
+				@user = User.find(params[:id])
+				@title = @user.name
+			else
+				deny_access
+			end
+		end
   end
 
   def new
